@@ -17,6 +17,10 @@ async function run(): Promise<void> {
       github.context.repo.repo,
       github.context.sha
     );
+    if (!pull) {
+      core.debug('pull request not found');
+      return;
+    }
 
     core.setOutput('title', pull.title);
     core.setOutput('body', pull.body);
@@ -34,7 +38,7 @@ async function getMergedPullRequest(
   owner: string,
   repo: string,
   sha: string
-): Promise<PullRequest> {
+): Promise<PullRequest | null> {
   const client = new github.GitHub(githubToken);
 
   const resp = await client.pulls.list({
@@ -48,7 +52,7 @@ async function getMergedPullRequest(
 
   const pull = resp.data.find(p => p.merge_commit_sha === sha);
   if (!pull) {
-    throw new Error('pull request not found');
+    return null;
   }
 
   return {
