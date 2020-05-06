@@ -12,8 +12,8 @@ It would be more useful to use this with other GitHub Actions' outputs.
 
 ## Why this action?
 
-The permissions for the GITHUB_TOKEN in forked repositories is read-only.
-That's why it's necessary to trigger `push` events for base branch if you want to trigger `pull_request` `closed` events.
+The permissions for the GitHub token in forked repositories are read-only.
+That's why it's necessary to trigger `push` events for base branch if you want to trigger `pull_request` `merged` events for some write use cases.
 
 However, `push` events don't have information on pull requests, rather than `pull_request` events.
 This action provides you with information on the pull request even if you trigger a `push` event.
