@@ -2033,6 +2033,10 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const pull = yield getMergedPullRequest(core.getInput('github_token'), github.context.repo.owner, github.context.repo.repo, github.context.sha);
+            if (!pull) {
+                core.debug('pull request not found');
+                return;
+            }
             core.setOutput('title', pull.title);
             core.setOutput('body', pull.body);
             core.setOutput('number', pull.number);
@@ -2058,7 +2062,7 @@ function getMergedPullRequest(githubToken, owner, repo, sha) {
         });
         const pull = resp.data.find(p => p.merge_commit_sha === sha);
         if (!pull) {
-            throw new Error('pull request not found');
+            return null;
         }
         return {
             title: pull.title,
