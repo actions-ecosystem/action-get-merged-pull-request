@@ -1,10 +1,15 @@
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 
+interface User {
+  login: string;
+}
+
 interface PullRequest {
   title: string;
   body: string;
   number: number;
+  user: User;
   labels: string[] | null;
   assignees: string[] | null;
 }
@@ -27,6 +32,7 @@ async function run(): Promise<void> {
     core.setOutput('number', pull.number);
     core.setOutput('labels', pull.labels?.join('\n'));
     core.setOutput('assignees', pull.assignees?.join('\n'));
+    core.setOutput('author', pull.user.login);
   } catch (e) {
     core.error(e);
     core.setFailed(e.message);
@@ -60,7 +66,10 @@ async function getMergedPullRequest(
     body: pull.body,
     number: pull.number,
     labels: pull.labels.map(l => l.name),
-    assignees: pull.assignees.map(a => a.login)
+    assignees: pull.assignees.map(a => a.login),
+    user: {
+      login: pull.user.login
+    }
   };
 }
 
