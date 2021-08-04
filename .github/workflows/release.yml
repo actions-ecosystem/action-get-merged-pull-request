@@ -16,7 +16,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions-ecosystem/action-release-label@v1
+      - uses: actions-ecosystem/action-release-label@v1.2.0
         id: release-label
         if: ${{ steps.get-merged-pull-request.outputs.title != null }}
         with:
