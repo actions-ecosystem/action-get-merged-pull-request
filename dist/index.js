@@ -2205,6 +2205,7 @@ function run() {
     });
 }
 function getMergedPullRequest(githubToken, owner, repo, sha) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const client = new github.GitHub(githubToken);
         const resp = yield client.pulls.list({
@@ -2215,10 +2216,16 @@ function getMergedPullRequest(githubToken, owner, repo, sha) {
             state: 'closed',
             per_page: 100
         });
-        const pull = resp.data.find(p => p.merge_commit_sha === sha);
-        if (!pull) {
+        const pullSummary = resp.data.find(p => p.merge_commit_sha === sha);
+        if (!pullSummary) {
             return null;
         }
+        const pull = (yield client.pulls.get({
+            owner,
+            repo,
+            pull_number: pullSummary.number
+        })).data;
+        const merged_by = (_a = pull.merged_by) === null || _a === void 0 ? void 0 : _a.login;
         return {
             title: pull.title,
             body: pull.body,
@@ -2227,7 +2234,8 @@ function getMergedPullRequest(githubToken, owner, repo, sha) {
             assignees: pull.assignees.map(a => a.login),
             user: {
                 login: pull.user.login
-            }
+            },
+            merged_by: merged_by ? { login: merged_by } : null
         };
     });
 }
