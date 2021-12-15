@@ -10,6 +10,7 @@ interface PullRequest {
   body: string;
   number: number;
   user: User;
+  merged_by: User | null;
   labels: string[] | null;
   assignees: string[] | null;
 }
@@ -56,10 +57,20 @@ async function getMergedPullRequest(
     per_page: 100
   });
 
-  const pull = resp.data.find(p => p.merge_commit_sha === sha);
-  if (!pull) {
+  const pullSummary = resp.data.find(p => p.merge_commit_sha === sha);
+  if (!pullSummary) {
     return null;
   }
+
+  const pull = (
+    await client.pulls.get({
+      owner,
+      repo,
+      pull_number: pullSummary.number
+    })
+  ).data;
+
+  const merged_by = pull.merged_by?.login;
 
   return {
     title: pull.title,
@@ -69,7 +80,8 @@ async function getMergedPullRequest(
     assignees: pull.assignees.map(a => a.login),
     user: {
       login: pull.user.login
-    }
+    },
+    merged_by: merged_by ? { login: merged_by } : null
   };
 }
 
