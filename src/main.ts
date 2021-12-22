@@ -9,6 +9,7 @@ interface PullRequest {
   title: string;
   body: string;
   number: number;
+  html_url: string;
   user: User;
   merged_by: User | null;
   labels: string[] | null;
@@ -76,6 +77,7 @@ async function getMergedPullRequest(
     title: pull.title,
     body: pull.body,
     number: pull.number,
+    html_url: pull.html_url,
     labels: pull.labels.map(l => l.name),
     assignees: pull.assignees.map(a => a.login),
     user: {
