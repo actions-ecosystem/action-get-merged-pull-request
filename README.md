@@ -35,8 +35,11 @@ For further details, see https://help.github.com/en/actions/reference/events-tha
 | `title`     | The title of the pull request.                                                                         | `string` |
 | `body`      | The body of the pull request.                                                                          | `string` |
 | `number`    | The number of the pull request.                                                                        | `number` |
+| `html_url`  | The html url of the pull request.                                                                      | `string` |
 | `labels`    | The list of labels for the pull request. Separated with line breaks if there're multiple labels.       | `string` |
 | `assignees` | The list of assignees for the pull request. Separated with line breaks if there're multiple assignees. | `string` |
+| `author`    | The GitHub username of the creator of the pull request.                                                | `string` |
+| `merged_by` | The GitHub username of the actor that merged the pull request.                                         | `string` |
 
 ## License
 
