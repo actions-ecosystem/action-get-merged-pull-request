@@ -39,9 +39,9 @@ async function getMergedPullRequest(
   repo: string,
   sha: string
 ): Promise<PullRequest | null> {
-  const client = new github.GitHub(githubToken);
+  const octokit = github.getOctokit(githubToken);
 
-  const resp = await client.pulls.list({
+  const resp = await octokit.rest.pulls.list({
     owner,
     repo,
     sort: 'updated',
@@ -57,10 +57,10 @@ async function getMergedPullRequest(
 
   return {
     title: pull.title,
-    body: pull.body,
+    body: pull.body as string,
     number: pull.number,
-    labels: pull.labels.map(l => l.name),
-    assignees: pull.assignees.map(a => a.login)
+    labels: pull.labels.map(l => l.name as string),
+    assignees: pull.assignees!.map(a => a.login)
   };
 }
 
