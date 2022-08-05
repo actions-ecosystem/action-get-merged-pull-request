@@ -7,6 +7,7 @@ interface PullRequest {
   number: number;
   labels: string[] | null;
   assignees: string[] | null;
+  branch: string;
 }
 
 async function run(): Promise<void> {
@@ -60,7 +61,8 @@ async function getMergedPullRequest(
     body: pull.body,
     number: pull.number,
     labels: pull.labels.map(l => l.name),
-    assignees: pull.assignees.map(a => a.login)
+    assignees: pull.assignees.map(a => a.login),
+    branch: pull.head.ref
   };
 }
 
