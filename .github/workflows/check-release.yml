@@ -9,9 +9,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
 
-      - uses: actions-ecosystem/action-release-label@v1
+      - uses: mgoodness/action-release-label@main
         id: release-label
         if: ${{ startsWith(github.event.label.name, 'release/') }}
 
@@ -33,6 +35,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            This PR will update [${{ github.repository }}](https://github.com/${{ github.repository }}) from [${{ steps.get-latest-tag.outputs.tag }}](https://github.com/${{ github.repository }}/releases/tag/${{ steps.get-latest-tag.outputs.tag }}) to ${{ steps.bump-semver.outputs.new_version }} :rocket:
+            This PR will update [${{ github.repository }}](${{ github.server_url }}/${{ github.repository }}) from [${{ steps.get-latest-tag.outputs.tag }}](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.get-latest-tag.outputs.tag }}) to ${{ steps.bump-semver.outputs.new_version }} :rocket:
 
             If this update isn't as you expected, you may want to change or remove the *release label*.
