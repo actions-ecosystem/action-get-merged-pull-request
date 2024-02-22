@@ -59,7 +59,7 @@ async function getMergedPullRequest(
     title: pull.title,
     body: pull.body as string,
     number: pull.number,
-    labels: pull.labels.map(l => l.name as string),
+    labels: pull.labels.map(l => l.name),
     assignees: pull.assignees!.map(a => a.login)
   };
 }
